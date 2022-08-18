@@ -14,3 +14,14 @@ from (select fuck.*,
       from fuck
      ) fuck
 where prev_rating is null or prev_rating <> rating;
+
+
+
+select symbol, min(date), max(date)
+from (select s.*,
+             (row_number() over (order by date) - 
+              row_number() over (partition by symbol order by date)
+             ) as grp
+      from s
+     ) grp
+group by grp, symbol;
