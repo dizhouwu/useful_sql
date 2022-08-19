@@ -16,12 +16,12 @@ from (select fuck.*,
 where prev_rating is null or prev_rating <> rating;
 
 
-
-select symbol, min(date), max(date)
+select * from (
+select id symbol, min(date), max(date)
 from (select s.*,
-             (row_number() over (order by date) - 
-              row_number() over (partition by symbol order by date)
+             (row_number() over (partition by id order by date) - 
+              row_number() over (partition by id, symbol order by date)
              ) as grp
       from s
      ) grp
-group by grp, symbol;
+group by id, grp, symbol;
